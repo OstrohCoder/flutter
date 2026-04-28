@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
-import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,11 +20,14 @@ class HomeScreen extends StatelessWidget {
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Text(
-                  user.name[0],
-                  style: const TextStyle(color: Colors.white),
+              leading: Hero(
+                tag: 'avatar-${user.id}',
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Text(
+                    user.name[0],
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
 
@@ -39,11 +41,7 @@ class HomeScreen extends StatelessWidget {
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
 
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(user: user),
-                  ),
-                );
+                Navigator.of(context).pushNamed('/profile', arguments: user);
               },
             ),
           );
