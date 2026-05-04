@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'models/task.dart';
 
@@ -32,24 +35,58 @@ class TodoListScreen extends StatefulWidget {
 class _TodoListScreenState extends State<TodoListScreen> {
   List<Task> _tasks = [];
   late TextEditingController _controller;
+  TaskCategory? _selectedCategory;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = TextEditingController();
+    _loadTasks().then((_) {
+      if (_tasks.isEmpty) {
+        setState(() {
+          _tasks = [
+            Task(
+              id: 1,
+              title: 'Buy groceries',
+              isDone: true,
+              category: TaskCategory.shopping,
+              priority: Priority.medium,
+            ),
+            Task(
+              id: 2,
+              title: 'Finish homework',
+              category: TaskCategory.work,
+              priority: Priority.low,
+            ),
+            Task(
+              id: 3,
+              title: 'Call mom',
+              isDone: true,
+              category: TaskCategory.personal,
+              priority: Priority.high,
+            ),
+            Task(id: 4, title: 'Read a book'),
+            Task(
+              id: 5,
+              title: 'Exercise',
+              isDone: false,
+              category: TaskCategory.work,
+              priority: Priority.high,
+            ),
+          ];
+        });
+      }
+    });
 
-    _tasks = [
-      Task(id: 1, title: 'Buy groceries', isDone: true),
-      Task(id: 2, title: 'Finish homework'),
-      Task(id: 3, title: 'Call mom', isDone: true),
-      Task(id: 4, title: 'Read a book'),
-      Task(id: 5, title: 'Exercise', isDone: false),
-    ];
+    _controller = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
+    final filteredTasks = _selectedCategory == null
+        ? _tasks
+        : _tasks.where((t) => t.category == _selectedCategory).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Tasks'),
@@ -58,6 +95,20 @@ class _TodoListScreenState extends State<TodoListScreen> {
       body: Column(
         children: [
           _buildStatistics(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildChip(null, 'All'),
+                  _buildChip(TaskCategory.work, 'Work'),
+                  _buildChip(TaskCategory.personal, 'Personal'),
+                  _buildChip(TaskCategory.shopping, 'Shopping'),
+                ],
+              ),
+            ),
+          ),
           if (_tasks.isEmpty)
             Center(
               child: Column(
@@ -73,9 +124,9 @@ class _TodoListScreenState extends State<TodoListScreen> {
 
           Expanded(
             child: ListView.builder(
-              itemCount: _tasks.length,
+              itemCount: filteredTasks.length,
               itemBuilder: (context, index) {
-                final task = _tasks[index];
+                final task = filteredTasks[index];
 
                 return Dismissible(
                   key: Key(task.id.toString()),
@@ -93,9 +144,18 @@ class _TodoListScreenState extends State<TodoListScreen> {
                       vertical: 4,
                     ),
                     child: ListTile(
-                      leading: Checkbox(
-                        value: task.isDone,
-                        onChanged: (value) => _toggleTask(task.id),
+                      leading: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(width: 4),
+                          _getPriorityIcon(task.priority),
+                          SizedBox(width: 4),
+
+                          Checkbox(
+                            value: task.isDone,
+                            onChanged: (value) => _toggleTask(task.id),
+                          ),
+                        ],
                       ),
 
                       title: Text(
@@ -185,6 +245,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
         _tasks.add(newTask);
       });
 
+      _saveTasks();
+
       _controller.clear();
       Navigator.pop(context);
     } else {
@@ -199,6 +261,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
       final task = _tasks.firstWhere((t) => t.id == id);
       task.toggle();
     });
+    _saveTasks();
   }
 
   void _deleteTask(int id) {
@@ -206,9 +269,59 @@ class _TodoListScreenState extends State<TodoListScreen> {
       _tasks.removeWhere((task) => task.id == id);
     });
 
+    _saveTasks();
+
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text('Task deleted')));
+  }
+
+  Widget _buildChip(TaskCategory? category, String label) {
+    final isSelected = _selectedCategory == category;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        onSelected: (_) {
+          setState(() {
+            _selectedCategory = category;
+          });
+        },
+      ),
+    );
+  }
+
+  Icon _getPriorityIcon(Priority priority) {
+    switch (priority) {
+      case Priority.high:
+        return Icon(Icons.priority_high, color: Colors.red);
+      case Priority.medium:
+        return Icon(Icons.trending_up, color: Colors.orange);
+      case Priority.low:
+        return Icon(Icons.low_priority, color: Colors.green);
+    }
+  }
+
+  Future<void> _saveTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final taskList = _tasks.map((t) => t.toJson()).toList();
+    final jsonString = jsonEncode(taskList);
+
+    await prefs.setString('tasks', jsonString);
+  }
+
+  Future<void> _loadTasks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('tasks');
+
+    if (jsonString != null) {
+      final List decoded = jsonDecode(jsonString);
+
+      _tasks = decoded.map((e) => Task.fromJson(e)).toList();
+    }
   }
 
   @override
