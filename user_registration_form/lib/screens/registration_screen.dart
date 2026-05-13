@@ -14,6 +14,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _confirmEmailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -32,6 +33,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _confirmEmailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -84,6 +86,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   (value) => Validators.required(value, fieldName: 'Email'),
                   Validators.email,
                 ]),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextFormField(
+                controller: _confirmEmailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Email',
+                  prefixIcon: Icon(Icons.email_outlined),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value != _emailController.text) {
+                    return 'Email адреси не співпадають';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 16),
@@ -271,6 +291,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Виберіть дату народження')));
+      return;
+    }
+
+    final now = DateTime.now();
+    int age = now.year - _birthDate!.year;
+    if (now.month < _birthDate!.month ||
+        (now.month == _birthDate!.month && now.day < _birthDate!.day)) {
+      age--;
+    }
+    if (age < 18) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Вам має бути 18 років або більше')),
+      );
       return;
     }
 
