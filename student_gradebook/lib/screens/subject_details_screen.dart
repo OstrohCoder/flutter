@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
 import '../models/grade_type.dart';
+import '../widgets/empty_state.dart';
 
 class SubjectDetailsScreen extends StatefulWidget {
   final Subject subject;
@@ -200,56 +201,58 @@ class _SubjectDetailsScreenState extends State<SubjectDetailsScreen> {
           ),
 
           Expanded(
-            child: ListView.builder(
-              itemCount: widget.subject.grades.length,
-              itemBuilder: (context, index) {
-                final grade = widget.subject.grades[index];
-                return Dismissible(
-                  key: Key(grade.id.toString()),
-                  onDismissed: (_) => _deleteGrade(grade.id),
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(left: 16),
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: ListTile(
-                      leading: Icon(grade.type.icon),
-                      title: Text(grade.description),
-                      subtitle: Text(grade.formattedDate),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            grade.scoreText,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
+            child: widget.subject.grades.isEmpty
+                ? const EmptyState() // Покаже емпті стейт, якщо оцінок немає
+                : ListView.builder(
+                    itemCount: widget.subject.grades.length,
+                    itemBuilder: (context, index) {
+                      final grade = widget.subject.grades[index];
+                      return Dismissible(
+                        key: Key(grade.id.toString()),
+                        onDismissed: (_) => _deleteGrade(grade.id),
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(left: 16),
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            grade.status,
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(
-                                  color: grade.status == 'Excellent'
-                                      ? Colors.green
-                                      : grade.status == 'Good'
-                                      ? Colors.orange
-                                      : Colors.red,
+                          child: ListTile(
+                            leading: Icon(grade.type.icon),
+                            title: Text(grade.description),
+                            subtitle: Text(grade.formattedDate),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  grade.scoreText,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  grade.status,
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: grade.status == 'Excellent'
+                                            ? Colors.green
+                                            : grade.status == 'Good'
+                                            ? Colors.orange
+                                            : Colors.red,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),

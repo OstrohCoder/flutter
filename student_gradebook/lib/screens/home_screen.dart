@@ -3,6 +3,7 @@ import '../models/subject.dart';
 import '../models/grade.dart';
 import '../models/grade_type.dart';
 import '../widgets/subject_card.dart';
+import '../widgets/empty_state.dart';
 import 'subject_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -274,15 +275,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           Expanded(
-            child: ListView.builder(
-              itemCount: _subjects.length,
-              itemBuilder: (context, index) {
-                return SubjectCard(
-                  subject: _subjects[index],
-                  onTap: () => _navigateToSubjectDetails(_subjects[index]),
-                );
-              },
-            ),
+            child: _subjects.isEmpty
+                ? const EmptyState()
+                : ListView.builder(
+                    itemCount: _subjects.length,
+                    itemBuilder: (context, index) {
+                      return SubjectCard(
+                        subject: _subjects[index],
+                        onTap: () =>
+                            _navigateToSubjectDetails(_subjects[index]),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
