@@ -12,13 +12,21 @@ class UsersScreen extends StatefulWidget {
 class _UsersScreenState extends State<UsersScreen> {
   final ApiService _apiService = ApiService();
 
+  static List<User>? _cachedUsers;
   List<User> _users = [];
   bool _isLoading = true;
   String? _error;
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+
+    if (_cachedUsers != null) {
+      _users = _cachedUsers!;
+      _isLoading = false;
+    }
+
     _loadUsers();
   }
 
@@ -32,6 +40,7 @@ class _UsersScreenState extends State<UsersScreen> {
       final users = await _apiService.getUsers();
       setState(() {
         _users = users;
+        _cachedUsers = users;
         _isLoading = false;
       });
     } catch (e) {
@@ -42,13 +51,39 @@ class _UsersScreenState extends State<UsersScreen> {
     }
   }
 
+  List<User> get _filteredUsers {
+    if (_searchQuery.isEmpty) return _users;
+    return _users
+        .where(
+          (user) =>
+              user.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Users List'),
         actions: [IconButton(icon: Icon(Icons.refresh), onPressed: _loadUsers)],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+            child: TextField(
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+                filled: true,
+              ),
+              onChanged: (value) => setState(() => _searchQuery = value),
+            ),
+          ),
+        ),
       ),
+
       body: _buildBody(),
     );
   }
@@ -58,7 +93,7 @@ class _UsersScreenState extends State<UsersScreen> {
       return _buildLoadingState();
     } else if (_error != null) {
       return _buildErrorState();
-    } else if (_users.isEmpty) {
+    } else if (_filteredUsers.isEmpty) {
       return _buildEmptyState();
     } else {
       return _buildSuccessState();
@@ -122,9 +157,9 @@ class _UsersScreenState extends State<UsersScreen> {
     return RefreshIndicator(
       onRefresh: _loadUsers,
       child: ListView.builder(
-        itemCount: _users.length,
+        itemCount: _filteredUsers.length,
         itemBuilder: (context, index) {
-          return _buildUserCard(_users[index]);
+          return _buildUserCard(_filteredUsers[index]);
         },
       ),
     );
@@ -144,8 +179,10 @@ class _UsersScreenState extends State<UsersScreen> {
             Text('📞 ${user.phone}'),
           ],
         ),
-        isThreeLine: true,
-        trailing: Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: Center(
+          widthFactor: 1,
+          child: Icon(Icons.arrow_forward_ios, size: 16),
+        ),
         onTap: () => _showUserDetails(user),
       ),
     );
