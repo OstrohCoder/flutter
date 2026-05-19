@@ -7,6 +7,10 @@ class StorageService {
   static const String _isDarkModeKey = 'isDarkMode';
   static const String _lastSaveTimeKey = 'lastSaveTime';
 
+  static const String _totalTasksCreatedKey = 'totalTasksCreated';
+  static const String _lastActiveDateKey = 'lastActiveDate';
+  static const String _streakKey = 'streak';
+
   static final StorageService _instance = StorageService._internal();
   factory StorageService() => _instance;
   StorageService._internal();
@@ -57,6 +61,36 @@ class StorageService {
     final DateTime time = DateTime.parse(timeString);
     return '${time.hour}:${time.minute.toString().padLeft(2, '0')}';
   }
+
+  Future<void> incrementTotalTasks() async {
+    final current = _prefs?.getInt(_totalTasksCreatedKey) ?? 0;
+    await _prefs?.setInt(_totalTasksCreatedKey, current + 1);
+  }
+
+  int getTotalTasksCreated() => _prefs?.getInt(_totalTasksCreatedKey) ?? 0;
+
+  Future<void> updateStreak() async {
+    final now = DateTime.now();
+    final lastDateStr = _prefs?.getString(_lastActiveDateKey);
+
+    if (lastDateStr != null) {
+      final lastDate = DateTime.parse(lastDateStr);
+      final difference = now.difference(lastDate).inDays;
+
+      if (difference == 1) {
+        final current = _prefs?.getInt(_streakKey) ?? 0;
+        await _prefs?.setInt(_streakKey, current + 1);
+      } else if (difference > 1) {
+        await _prefs?.setInt(_streakKey, 1);
+      }
+    } else {
+      await _prefs?.setInt(_streakKey, 1);
+    }
+
+    await _prefs?.setString(_lastActiveDateKey, now.toIso8601String());
+  }
+
+  int getStreak() => _prefs?.getInt(_streakKey) ?? 0;
 
   Future<void> clearAll() async {
     await _prefs?.clear();

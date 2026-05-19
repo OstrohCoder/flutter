@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/todo_item.dart';
 import '../services/storage_service.dart';
+import 'stats_screen.dart';
 
 class TodoScreen extends StatefulWidget {
   final VoidCallback onToggleTheme;
@@ -17,6 +18,8 @@ class _TodoScreenState extends State<TodoScreen> {
   final TextEditingController _textController = TextEditingController();
   bool _isDarkMode = false;
   bool _isLoading = true;
+
+  String? _selectedCategory;
 
   @override
   void initState() {
@@ -56,6 +59,7 @@ class _TodoScreenState extends State<TodoScreen> {
     final newTodo = TodoItem(
       id: DateTime.now().toString(),
       title: _textController.text.trim(),
+      category: _selectedCategory,
       isCompleted: false,
       createdAt: DateTime.now(),
     );
@@ -65,7 +69,11 @@ class _TodoScreenState extends State<TodoScreen> {
     });
 
     _textController.clear();
+    setState(() => _selectedCategory = null);
     _saveData();
+
+    _storage.incrementTotalTasks();
+    _storage.updateStreak();
   }
 
   void _toggleTodo(TodoItem todo) {
@@ -115,6 +123,13 @@ class _TodoScreenState extends State<TodoScreen> {
             icon: Icon(_isDarkMode ? Icons.light_mode : Icons.dark_mode),
             onPressed: _toggleTheme,
           ),
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => StatsScreen(todos: _todos)),
+            ),
+          ),
         ],
       ),
       body: _isLoading
@@ -122,27 +137,48 @@ class _TodoScreenState extends State<TodoScreen> {
           : Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Row(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            hintText: 'Add new task...',
-                            border: OutlineInputBorder(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _textController,
+                              decoration: const InputDecoration(
+                                hintText: 'Add new task...',
+                                border: OutlineInputBorder(),
+                              ),
+                              onSubmitted: (_) => _addTodo(),
+                            ),
                           ),
-                          onSubmitted: (_) => _addTodo(),
-                        ),
+                          const SizedBox(width: 8),
+                          IconButton.filled(
+                            icon: const Icon(Icons.add),
+                            onPressed: _addTodo,
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 8),
-                      IconButton.filled(
-                        icon: Icon(Icons.add),
-                        onPressed: _addTodo,
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: ['Work', 'Personal', 'Shopping'].map((cat) {
+                          return FilterChip(
+                            label: Text(cat),
+                            selected: _selectedCategory == cat,
+                            onSelected: (selected) => setState(
+                              () => _selectedCategory = selected ? cat : null,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 4),
+                const Divider(height: 10),
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -208,6 +244,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     : TextDecoration.none,
               ),
             ),
+            subtitle: todo.category != null ? Text(todo.category!) : null,
             trailing: IconButton(
               icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () => _deleteTodo(todo),
