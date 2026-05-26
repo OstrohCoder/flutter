@@ -19,39 +19,55 @@ final productsProvider = Provider<List<Product>>((ref) {
     Product(
       id: '1',
       name: 'Flutter Smartphone',
-      price: 999.99,
+      price: 1000.00,
       category: 'Electronics',
       imageEmoji: '📱',
     ),
     Product(
       id: '2',
       name: 'Developer Hoodie',
-      price: 59.99,
+      price: 60.00,
       category: 'Clothing',
       imageEmoji: '🧥',
     ),
     Product(
       id: '3',
       name: '"Flutter in Action"',
-      price: 45.00,
+      price: 45.50,
       category: 'Books',
       imageEmoji: '📚',
     ),
     Product(
       id: '4',
       name: 'MacBook Pro 16',
-      price: 2499.99,
+      price: 2400.00,
       category: 'Electronics',
       imageEmoji: '💻',
     ),
     Product(
       id: '5',
       name: 'Coding Cap',
-      price: 24.99,
+      price: 25.50,
       category: 'Clothing',
       imageEmoji: '🧢',
     ),
   ];
+});
+
+final selectedCategoryProvider = StateProvider<String?>((ref) => null);
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+final filteredProductsProvider = Provider<List<Product>>((ref) {
+  final products = ref.watch(productsProvider);
+  final selectedCategory = ref.watch(selectedCategoryProvider);
+  final query = ref.watch(searchQueryProvider).toLowerCase().trim();
+
+  return products.where((p) {
+    final matchesCategory =
+        selectedCategory == null || p.category == selectedCategory;
+    final matchesQuery = query.isEmpty || p.name.toLowerCase().contains(query);
+    return matchesCategory && matchesQuery;
+  }).toList();
 });
 
 /// TODO (додатково): Створіть computed provider для загальної вартості всіх продуктів

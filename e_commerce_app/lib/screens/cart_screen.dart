@@ -61,9 +61,8 @@ class CartScreen extends ConsumerWidget {
       body: cartItems.isEmpty
           ? _buildEmptyCart(context)
           : _buildCartList(context, ref, cartItems),
-      bottomNavigationBar: cartItems.isNotEmpty
-          ? _buildBottomBar(context, totalPrice)
-          : null,
+      bottomNavigationBar:
+          cartItems.isNotEmpty ? _buildBottomBar(context, totalPrice) : null,
     );
   }
 
@@ -110,13 +109,14 @@ class CartScreen extends ConsumerWidget {
   Widget _buildCartList(
     BuildContext context,
     WidgetRef ref,
-    List cartItems,
+    List<CartItem> cartItems,
   ) {
     return ListView.builder(
       itemCount: cartItems.length,
       padding: const EdgeInsets.all(8),
       itemBuilder: (context, index) {
-        final product = cartItems[index];
+        final item = cartItems[index];
+        final product = item.product;
 
         return Dismissible(
           key: Key(product.id),
@@ -125,19 +125,14 @@ class CartScreen extends ConsumerWidget {
             color: Colors.red,
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(right: 20),
-            child: const Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
+            child: const Icon(Icons.delete, color: Colors.white),
           ),
           onDismissed: (_) {
             ref.read(cartProvider.notifier).removeProduct(product.id);
-
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('${product.name} removed from cart'),
-                duration: const Duration(seconds: 1),
-              ),
+                  content: Text('${product.name} removed from cart'),
+                  duration: const Duration(seconds: 1)),
             );
           },
           child: Card(
@@ -148,40 +143,42 @@ class CartScreen extends ConsumerWidget {
               leading: CircleAvatar(
                 radius: 28,
                 backgroundColor: Colors.blue.shade100,
-                child: Text(
-                  product.imageEmoji,
-                  style: const TextStyle(fontSize: 28),
-                ),
+                child: Text(product.imageEmoji,
+                    style: const TextStyle(fontSize: 28)),
               ),
               // TODO: Додайте назву та ціну
               title: Text(
-                product.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                '${product.name} x${item.quantity}', // <-- "x2"
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               subtitle: Text(
-                '\$${product.price.toStringAsFixed(2)}',
+                '\$${(product.price * item.quantity).toStringAsFixed(2)}',
                 style: const TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14),
               ),
-              // TODO: Додайте кнопку видалення
-              trailing: IconButton(
-                icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
-                onPressed: () {
-                  ref.read(cartProvider.notifier).removeProduct(product.id);
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${product.name} removed from cart'),
-                      duration: const Duration(seconds: 1),
-                    ),
-                  );
-                },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // TODO: Додайте кнопку видалення
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle_outline,
+                        color: Colors.red),
+                    onPressed: () =>
+                        ref.read(cartProvider.notifier).decrement(product.id),
+                  ),
+                  Text('${item.quantity}',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
+                  IconButton(
+                    icon: const Icon(Icons.add_circle_outline,
+                        color: Colors.green),
+                    onPressed: () =>
+                        ref.read(cartProvider.notifier).increment(product.id),
+                  ),
+                ],
               ),
             ),
           ),
