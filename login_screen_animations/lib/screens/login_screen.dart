@@ -14,6 +14,10 @@ class _LoginScreenState extends State<LoginScreen>
   bool _logoVisible = false;
   bool _formVisible = false;
 
+  bool _emailVisible = false;
+  bool _passwordVisible = false;
+  bool _buttonVisible = false;
+
   bool _isLoading = false;
   bool _isSuccess = false;
   bool _isError = false;
@@ -104,6 +108,18 @@ class _LoginScreenState extends State<LoginScreen>
 
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) setState(() => _formVisible = true);
+    });
+
+    Future.delayed(const Duration(milliseconds: 700), () {
+      if (mounted) setState(() => _emailVisible = true);
+    });
+
+    Future.delayed(const Duration(milliseconds: 950), () {
+      if (mounted) setState(() => _passwordVisible = true);
+    });
+
+    Future.delayed(const Duration(milliseconds: 1200), () {
+      if (mounted) setState(() => _buttonVisible = true);
     });
 
     _controller = AnimationController(
@@ -203,41 +219,57 @@ class _LoginScreenState extends State<LoginScreen>
                           padding: const EdgeInsets.all(24),
                           child: Column(
                             children: [
-                              TextField(
-                                controller: _emailController,
-                                decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  prefixIcon: Icon(Icons.email),
-                                  border: OutlineInputBorder(),
-                                  errorText: _isError ? ' ' : null,
+                              AnimatedOpacity(
+                                opacity: _emailVisible ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 500),
+                                child: TextField(
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Email',
+                                    prefixIcon: Icon(Icons.email),
+                                    border: OutlineInputBorder(),
+                                    errorText: _isError ? ' ' : null,
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
                                 ),
-                                keyboardType: TextInputType.emailAddress,
                               ),
+
                               const SizedBox(height: 16),
-                              TextField(
-                                controller: _passwordController,
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  prefixIcon: Icon(Icons.lock),
-                                  border: OutlineInputBorder(),
-                                  errorText: _isError ? ' ' : null,
+
+                              AnimatedOpacity(
+                                opacity: _passwordVisible ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 500),
+                                child: TextField(
+                                  controller: _passwordController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    prefixIcon: Icon(Icons.lock),
+                                    border: OutlineInputBorder(),
+                                    errorText: _isError ? ' ' : null,
+                                  ),
+                                  obscureText: true,
                                 ),
-                                obscureText: true,
                               ),
+
                               const SizedBox(height: 24),
-                              GestureDetector(
-                                onTapDown: _onButtonTapDown,
-                                onTapUp: _onButtonTapUp,
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 100),
-                                  transform: Matrix4.identity()
-                                    ..scale(_buttonScale),
-                                  transformAlignment: Alignment.center,
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton(
-                                      onPressed: _login,
-                                      child: const Text('Login'),
+
+                              AnimatedOpacity(
+                                opacity: _buttonVisible ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 500),
+                                child: GestureDetector(
+                                  onTapDown: _onButtonTapDown,
+                                  onTapUp: _onButtonTapUp,
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 100),
+                                    transform: Matrix4.identity()
+                                      ..scale(_buttonScale),
+                                    transformAlignment: Alignment.center,
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: _login,
+                                        child: const Text('Login'),
+                                      ),
                                     ),
                                   ),
                                 ),
