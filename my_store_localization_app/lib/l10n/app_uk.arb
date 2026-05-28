@@ -1,0 +1,88 @@
+{
+  "@@locale": "uk",
+
+  "appTitle": "Мій Магазин",
+  "productsTab": "Товари",
+  "settingsTab": "Налаштування",
+
+  "helloUser": "Привіт, {name}!",
+  "@helloUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "itemsCount": "{count, plural, =0{Немає товарів} =1{1 товар} few{{count} товари} other{{count} товарів}}",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "totalPrice": "Разом: {price}",
+  "@totalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "addedDate": "Додано: {date}",
+  "@addedDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "languageLabel": "Мова",
+  "selectLanguage": "Оберіть мову",
+  "ukrainian": "Українська",
+  "english": "Англійська",
+  "polish": "Польська",
+  "french": "Французька",
+  "arabic": "Арабська",
+
+  "save": "Зберегти",
+  "cancel": "Скасувати",
+  "delete": "Видалити",
+  "edit": "Редагувати",
+  "add": "Додати",
+  "search": "Пошук",
+  "loading": "Завантаження...",
+  "logout": "Вийти",
+
+  "noProductsYet": "Товарів ще немає",
+  "emptyCart": "Ваш кошик порожній",
+  "outOfStock": "Немає в наявності",
+
+  "nameLabel": "Назва",
+  "priceLabel": "Ціна",
+  "descriptionLabel": "Опис",
+
+  "languageChanged": "Мову змінено на {language}",
+  "@languageChanged": {
+    "description": "SnackBar повідомлення після зміни мови",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "areYouSure": "Ви впевнені?",
+  "confirmDelete": "Ви дійсно хочете видалити цей товар?",
+  "productAdded": "Товар додано",
+  "productDeleted": "Товар видалено",
+  "errorGeneric": "Щось пішло не так. Спробуйте ще раз.",
+
+  "nameRequired": "Назва обов'язкова",
+  "priceRequired": "Ціна обов'язкова",
+  "priceInvalid": "Введіть коректну ціну"
+}

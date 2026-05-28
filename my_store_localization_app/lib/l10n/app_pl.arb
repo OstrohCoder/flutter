@@ -1,0 +1,88 @@
+{
+  "@@locale": "pl",
+
+  "appTitle": "Mój Sklep",
+  "productsTab": "Produkty",
+  "settingsTab": "Ustawienia",
+
+  "helloUser": "Cześć, {name}!",
+  "@helloUser": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "itemsCount": "{count, plural, =0{Brak produktów} =1{1 produkt} few{{count} produkty} many{{count} produktów} other{{count} produktu}}",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "totalPrice": "Łącznie: {price}",
+  "@totalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "addedDate": "Dodano: {date}",
+  "@addedDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "languageLabel": "Język",
+  "selectLanguage": "Wybierz język",
+  "ukrainian": "Ukraiński",
+  "english": "Angielski",
+  "polish": "Polski",
+  "french": "Francuski",
+  "arabic": "Arabski",
+
+  "save": "Zapisz",
+  "cancel": "Anuluj",
+  "delete": "Usuń",
+  "edit": "Edytuj",
+  "add": "Dodaj",
+  "search": "Szukaj",
+  "loading": "Ładowanie...",
+  "logout": "Wyloguj się",
+
+  "noProductsYet": "Brak produktów",
+  "emptyCart": "Twój koszyk jest pusty",
+  "outOfStock": "Brak w magazynie",
+
+  "nameLabel": "Nazwa",
+  "priceLabel": "Cena",
+  "descriptionLabel": "Opis",
+
+  "languageChanged": "Język zmieniony na {language}",
+  "@languageChanged": {
+    "description": "Komunikat SnackBar po zmianie języka",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "areYouSure": "Czy jesteś pewny?",
+  "confirmDelete": "Czy naprawdę chcesz usunąć ten produkt?",
+  "productAdded": "Produkt dodany",
+  "productDeleted": "Produkt usunięty",
+  "errorGeneric": "Coś poszło nie tak. Spróbuj ponownie.",
+
+  "nameRequired": "Nazwa jest wymagana",
+  "priceRequired": "Cena jest wymagana",
+  "priceInvalid": "Podaj prawidłową cenę"
+}

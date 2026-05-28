@@ -1,0 +1,77 @@
+{
+  "@@locale": "ar",
+
+  "appTitle": "متجري",
+  "productsTab": "المنتجات",
+  "settingsTab": "الإعدادات",
+
+  "helloUser": "مرحباً، {name}!",
+  "@helloUser": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+
+  "itemsCount": "{count, plural, =0{لا توجد منتجات} =1{منتج واحد} two{منتجان} few{{count} منتجات} many{{count} منتجاً} other{{count} منتج}}",
+  "@itemsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "totalPrice": "المجموع: {price}",
+  "@totalPrice": {
+    "placeholders": {
+      "price": { "type": "Object" }
+    }
+  },
+
+  "addedDate": "أضيف: {date}",
+  "@addedDate": {
+    "placeholders": {
+      "date": { "type": "Object" }
+    }
+  },
+
+  "languageLabel": "اللغة",
+  "selectLanguage": "اختر اللغة",
+  "ukrainian": "الأوكرانية",
+  "english": "الإنجليزية",
+  "polish": "البولندية",
+  "french": "الفرنسية",
+  "arabic": "العربية",
+
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "edit": "تعديل",
+  "add": "إضافة",
+  "search": "بحث",
+  "loading": "جارٍ التحميل...",
+  "logout": "تسجيل الخروج",
+
+  "noProductsYet": "لا توجد منتجات بعد",
+  "emptyCart": "سلة التسوق فارغة",
+  "outOfStock": "غير متوفر",
+
+  "nameLabel": "الاسم",
+  "priceLabel": "السعر",
+  "descriptionLabel": "الوصف",
+
+  "languageChanged": "تم تغيير اللغة إلى {language}",
+  "@languageChanged": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+
+  "areYouSure": "هل أنت متأكد؟",
+  "confirmDelete": "هل تريد حقاً حذف هذا المنتج؟",
+  "productAdded": "تمت إضافة المنتج",
+  "productDeleted": "تم حذف المنتج",
+  "errorGeneric": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+  "nameRequired": "الاسم مطلوب",
+  "priceRequired": "السعر مطلوب",
+  "priceInvalid": "أدخل سعراً صحيحاً"
+}

@@ -1,0 +1,3 @@
+arb-dir: lib/l10n  # ← Папка з ARB файлами
+template-arb-file: app_en.arb  # ← Базовий файл (англійська)
+output-localization-file: app_localizations.dart  # ← Згенерований файл

@@ -1,0 +1,77 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "Ma Boutique",
+  "productsTab": "Produits",
+  "settingsTab": "Paramètres",
+
+  "helloUser": "Bonjour, {name}!",
+  "@helloUser": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+
+  "itemsCount": "{count, plural, =0{Aucun article} =1{1 article} other{{count} articles}}",
+  "@itemsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "totalPrice": "Total: {price}",
+  "@totalPrice": {
+    "placeholders": {
+      "price": { "type": "Object" }
+    }
+  },
+
+  "addedDate": "Ajouté: {date}",
+  "@addedDate": {
+    "placeholders": {
+      "date": { "type": "Object" }
+    }
+  },
+
+  "languageLabel": "Langue",
+  "selectLanguage": "Choisir la langue",
+  "ukrainian": "Ukrainien",
+  "english": "Anglais",
+  "polish": "Polonais",
+  "french": "Français",
+  "arabic": "Arabe",
+
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "edit": "Modifier",
+  "add": "Ajouter",
+  "search": "Rechercher",
+  "loading": "Chargement...",
+  "logout": "Déconnexion",
+
+  "noProductsYet": "Aucun produit pour l'instant",
+  "emptyCart": "Votre panier est vide",
+  "outOfStock": "Rupture de stock",
+
+  "nameLabel": "Nom",
+  "priceLabel": "Prix",
+  "descriptionLabel": "Description",
+
+  "languageChanged": "Langue changée en {language}",
+  "@languageChanged": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+
+  "areYouSure": "Êtes-vous sûr?",
+  "confirmDelete": "Voulez-vous vraiment supprimer ce produit?",
+  "productAdded": "Produit ajouté",
+  "productDeleted": "Produit supprimé",
+  "errorGeneric": "Quelque chose s'est mal passé. Veuillez réessayer.",
+
+  "nameRequired": "Le nom est obligatoire",
+  "priceRequired": "Le prix est obligatoire",
+  "priceInvalid": "Entrez un prix valide"
+}

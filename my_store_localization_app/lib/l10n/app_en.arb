@@ -1,0 +1,94 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "My Store",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+
+  "productsTab": "Products",
+  "settingsTab": "Settings",
+
+  "helloUser": "Hello, {name}!",
+  "@helloUser": {
+    "description": "Greeting message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "itemsCount": "{count, plural, =0{No items} =1{1 item} other{{count} items}}",
+  "@itemsCount": {
+    "description": "Number of items with pluralization",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "totalPrice": "Total: {price}",
+  "@totalPrice": {
+    "placeholders": {
+      "price": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "addedDate": "Added: {date}",
+  "@addedDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      }
+    }
+  },
+
+  "languageLabel": "Language",
+  "selectLanguage": "Select Language",
+  "ukrainian": "Ukrainian",
+  "english": "English",
+  "polish": "Polish",
+  "french": "French",
+  "arabic": "Arabic",
+
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "add": "Add",
+  "search": "Search",
+  "loading": "Loading...",
+  "logout": "Log out",
+
+  "noProductsYet": "No products yet",
+  "emptyCart": "Your cart is empty",
+  "outOfStock": "Out of stock",
+
+  "nameLabel": "Name",
+  "priceLabel": "Price",
+  "descriptionLabel": "Description",
+
+  "languageChanged": "Language changed to {language}",
+  "@languageChanged": {
+    "description": "SnackBar message after language switch",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "areYouSure": "Are you sure?",
+  "confirmDelete": "Do you really want to delete this product?",
+  "productAdded": "Product added",
+  "productDeleted": "Product deleted",
+  "errorGeneric": "Something went wrong. Please try again.",
+
+  "nameRequired": "Name is required",
+  "priceRequired": "Price is required",
+  "priceInvalid": "Enter a valid price"
+}
