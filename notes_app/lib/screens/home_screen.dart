@@ -66,6 +66,12 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
+                icon: const Icon(Icons.note),
+                label: const Text('My Notes'),
+                onPressed: () => Navigator.pushNamed(context, '/notes'),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton.icon(
                 icon: const Icon(Icons.person),
                 label: const Text('Profile'),
                 onPressed: () => Navigator.pushNamed(context, '/profile'),
